@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dla Julii :)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-content">
+          <h1 class="title">
+            <span class="title-main">Wizualizator Figur 4D</span>
+            <span class="title-sub">Interaktywna projekcja wielowymiarowa</span>
+          </h1>
+          <div class="dedication">
+            <span class="dedication-text"
+              >Dla Julii, jako miły gest by mogła pooglądać figury w 4D</span
+            >
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Canvas Container -->
+        <div class="canvas-container">
+          <canvas id="canvas" width="800" height="600"></canvas>
+          <div class="canvas-overlay">
+          </div>
+        </div>
+
+        <!-- Controls Sidebar -->
+        <aside class="controls-sidebar">
+          <!-- Shape Selection -->
+          <div class="control-panel">
+            <h3 class="panel-title">
+              <span class="panel-icon">🔮</span>
+              Figura 4D
+            </h3>
+            <div class="panel-content">
+              <select id="shapeSelect" class="shape-selector">
+                <option value="tesseract">Tesserakt (Hipersześcian)</option>
+                <option value="hypersphere">Hipersfera</option>
+                <option value="simplex">Simplex 4D (5-komórka)</option>
+                <option value="hyperoctahedron">
+                  Hiperoktaedr (16-komórka)
+                </option>
+                <option value="hyperdodecahedron">
+                  Hiperdodekaedr (120-komórka)
+                </option>
+                <option value="duocylinder">Duocylinder</option>
+                <option value="custom">Niestandardowa</option>
+              </select>
+
+              <div class="custom-controls" id="customControls">
+                <div class="slider-group">
+                  <label class="slider-label">
+                    <span>Punktów na okręgu</span>
+                    <span class="slider-value" id="customPointsValue">8</span>
+                  </label>
+                  <input
+                    type="range"
+                    id="customPoints"
+                    class="slider"
+                    min="3"
+                    max="20"
+                    value="8"
+                    step="1"
+                  />
+                </div>
+                <div class="slider-group">
+                  <label class="slider-label">
+                    <span>Promień</span>
+                    <span class="slider-value" id="customRadiusValue">1.0</span>
+                  </label>
+                  <input
+                    type="range"
+                    id="customRadius"
+                    class="slider"
+                    min="0.5"
+                    max="3"
+                    value="1"
+                    step="0.1"
+                  />
+                </div>
+                <div class="slider-group">
+                    <label class="slider-label">
+                        <span>Jakość renderowania</span>
+                        <span class="slider-value" id="qualityValue">20</span>
+                    </label>
+                    <input
+                        type="range"
+                        id="quality"
+                        class="slider"
+                        min="8"
+                        max="100"
+                        value="20"
+                        step="1"
+                    />
+                </div>
+                <button class="btn btn-primary" onclick="generateCustomShape()">
+                  Generuj
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Rotation Controls -->
+          <div class="control-panel">
+            <h3 class="panel-title">
+              <span class="panel-icon">🌀</span>
+              Rotacja 4D
+            </h3>
+            <div class="panel-content">
+              <div class="rotation-grid">
+                <div class="slider-group">
+                  <label class="slider-label">
+                    <span>XY</span>
+                    <span class="slider-value" id="xyValue">0°</span>
+                  </label>
+                  <input
+                    type="range"
+                    id="rotXY"
+                    class="slider"
+                    min="0"
+                    max="360"
+                    value="0"
+                    step="1"
+                  />
+                </div>
+                <div class="slider-group">
+                  <label class="slider-label">
+                    <span>XZ</span>
+                    <span class="slider-value" id="xzValue">0°</span>
+                  </label>
+                  <input
+                    type="range"
+                    id="rotXZ"
+                    class="slider"
+                    min="0"
+                    max="360"
+                    value="0"
+                    step="1"
+                  />
+                </div>
+                <div class="slider-group">
+                  <label class="slider-label">
+                    <span>XW</span>
+                    <span class="slider-value" id="xwValue">0°</span>
+                  </label>
+                  <input
+                    type="range"
+                    id="rotXW"
+                    class="slider"
+                    min="0"
+                    max="360"
+                    value="0"
+                    step="1"
+                  />
+                </div>
+                <div class="slider-group">
+                  <label class="slider-label">
+                    <span>YZ</span>
+                    <span class="slider-value" id="yzValue">0°</span>
+                  </label>
+                  <input
+                    type="range"
+                    id="rotYZ"
+                    class="slider"
+                    min="0"
+                    max="360"
+                    value="0"
+                    step="1"
+                  />
+                </div>
+                <div class="slider-group">
+                  <label class="slider-label">
+                    <span>YW</span>
+                    <span class="slider-value" id="ywValue">0°</span>
+                  </label>
+                  <input
+                    type="range"
+                    id="rotYW"
+                    class="slider"
+                    min="0"
+                    max="360"
+                    value="0"
+                    step="1"
+                  />
+                </div>
+                <div class="slider-group">
+                  <label class="slider-label">
+                    <span>ZW</span>
+                    <span class="slider-value" id="zwValue">0°</span>
+                  </label>
+                  <input
+                    type="range"
+                    id="rotZW"
+                    class="slider"
+                    min="0"
+                    max="360"
+                    value="0"
+                    step="1"
+                  />
+                </div>
+              </div>
+
+              <div class="button-group">
+                <button
+                  class="btn btn-secondary"
+                  onclick="autoRotate()"
+                  id="autoRotateBtn"
+                >
+                  <span class="btn-icon">▶</span>
+                  Auto Rotacja
+                </button>
+                <button class="btn btn-outline" onclick="resetRotation()">
+                  <span class="btn-icon">↻</span>
+                  Reset
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Projection Controls -->
+          <div class="control-panel">
+            <h3 class="panel-title">
+              <span class="panel-icon">📐</span>
+              Projekcja
+            </h3>
+            <div class="panel-content">
+              <div class="projection-buttons">
+                <button
+                  id="orthogonal"
+                  class="btn btn-projection active"
+                  onclick="setProjection('orthogonal')"
+                >
+                  Ortogonalna
+                </button>
+                <button
+                  id="perspective"
+                  class="btn btn-projection"
+                  onclick="setProjection('perspective')"
+                >
+                  Perspektywiczna
+                </button>
+              </div>
+
+              <div class="slider-group">
+                <label class="slider-label">
+                  <span>Odległość kamery</span>
+                  <span class="slider-value" id="distValue">5.0</span>
+                </label>
+                <input
+                  type="range"
+                  id="distance"
+                  class="slider"
+                  min="2"
+                  max="10"
+                  value="5"
+                  step="0.1"
+                />
+              </div>
+
+              <div class="slider-group">
+                <label class="slider-label">
+                  <span>Skala</span>
+                  <span class="slider-value" id="scaleValue">100</span>
+                </label>
+                <input
+                  type="range"
+                  id="scale"
+                  class="slider"
+                  min="50"
+                  max="200"
+                  value="100"
+                  step="10"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Info Panel -->
+          <div class="control-panel info-panel">
+            <h3 class="panel-title">
+              <span class="panel-icon">ℹ</span>
+              Informacje
+            </h3>
+            <div class="panel-content">
+              <div id="shapeInfo" class="shape-info">
+                <div class="shape-name">Tesserakt (Hipersześcian 4D)</div>
+                <div class="shape-description">
+                  16 wierzchołków, 32 krawędzie, 24 ściany, 8 sześcianów
+                </div>
+                <div class="shape-stats">
+                  <span>Wierzchołków: <strong>16</strong></span>
+                  <span>Krawędzi: <strong>32</strong></span>
+                </div>
+              </div>
+
+              <div class="info-section">
+                <h4>Wskazówki:</h4>
+                <ul class="tips-list">
+                  <li>
+                    Użyj rotacji <strong>XW</strong>, <strong>YW</strong>,
+                    <strong>ZW</strong> dla prawdziwych ruchów 4D
+                  </li>
+                  <li>Spróbuj <em>Auto Rotacja</em> dla płynnej animacji</li>
+                  <li>Projekcja perspektywiczna pokazuje "głębokość 4D"</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </main>
+  </body>
+</html>
+
